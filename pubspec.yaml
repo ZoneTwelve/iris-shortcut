@@ -1,6 +1,6 @@
 name: iris_shortcut
 description: Iris Shortcut - Quick access to Iris across all messaging apps
-version: 1.0.0+1
+version: 1.0.0-alpha+1
 
 environment:
   sdk: '>=3.0.0 <4.0.0'
