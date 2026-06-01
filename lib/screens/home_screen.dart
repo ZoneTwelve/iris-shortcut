@@ -82,19 +82,35 @@ class _HomeScreenState extends State<HomeScreen> with TickerProviderStateMixin {
     final deepLink = platform.buildDeepLink(configVal);
     final webLink = platform.buildWebLink(configVal);
 
-    if (deepLink != null) {
-      final uri = Uri.parse(deepLink);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-        return;
-      }
-    }
+    // Detect if running on iPad.
+    // On iPad, custom URL schemes are unreliable because many messaging apps
+    // run in iPhone compatibility mode. Universal Links (https://) work much
+    // better on iPad as they trigger the app's AASA-based routing.
+    final isTablet = MediaQuery.of(context).size.shortestSide >= 600;
 
-    if (webLink != null) {
-      final uri = Uri.parse(webLink);
-      if (await canLaunchUrl(uri)) {
-        await launchUrl(uri, mode: LaunchMode.externalApplication);
-        return;
+    if (isTablet) {
+      // iPad: prefer universal/web link first, then fall back to deep link
+      if (webLink != null) {
+        final uri = Uri.parse(webLink);
+        final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+        if (launched) return;
+      }
+      if (deepLink != null) {
+        final uri = Uri.parse(deepLink);
+        final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+        if (launched) return;
+      }
+    } else {
+      // iPhone: prefer deep link (custom scheme) first, then fall back to web
+      if (deepLink != null) {
+        final uri = Uri.parse(deepLink);
+        final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+        if (launched) return;
+      }
+      if (webLink != null) {
+        final uri = Uri.parse(webLink);
+        final launched = await launchUrl(uri, mode: LaunchMode.externalApplication);
+        if (launched) return;
       }
     }
 

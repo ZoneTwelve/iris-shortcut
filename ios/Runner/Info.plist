@@ -53,6 +53,21 @@
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
 	<string>Main</string>
+	<key>LSApplicationQueriesSchemes</key>
+	<array>
+		<string>tg</string>
+		<string>instagram</string>
+		<string>whatsapp</string>
+		<string>weixin</string>
+		<string>line</string>
+		<string>discord</string>
+		<string>slack</string>
+		<string>fb-messenger</string>
+		<string>sgnl</string>
+		<string>twitter</string>
+		<string>viber</string>
+		<string>skype</string>
+	</array>
 	<key>UISupportedInterfaceOrientations</key>
 	<array>
 		<string>UIInterfaceOrientationPortrait</string>

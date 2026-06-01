@@ -106,15 +106,18 @@ final List<ShortcutPlatform> allPlatforms = [
     description: 'Open Iris on WeChat',
     iconEmoji: '🟢',
     accentColor: const Color(0xFF07C160),
-    deepLinkTemplate: 'weixin://dl/chat?{value}',
-    webFallbackTemplate: 'https://weixin.qq.com/r/{value}',
+    // WeChat does not support reliable deep links to specific chats.
+    // weixin:// scheme can open the app but not navigate to a contact.
+    // Best effort: open WeChat app, user navigates manually.
+    deepLinkTemplate: 'weixin://',
+    webFallbackTemplate: null,
     configKey: 'wechat_id',
     configLabel: 'WeChat ID',
     configHint: 'e.g. iris_wechat',
     setupSteps: [
       'Find Iris WeChat ID',
       'Paste the WeChat ID above',
-      'Note: WeChat deep links may require scanning QR code on some devices',
+      'Note: WeChat does not support direct deep links to chats — the app will open but you may need to search for the contact manually',
     ],
   ),
   ShortcutPlatform(
@@ -124,14 +127,15 @@ final List<ShortcutPlatform> allPlatforms = [
     iconEmoji: '🟩',
     accentColor: const Color(0xFF06C755),
     deepLinkTemplate: 'line://ti/p/{value}',
-    webFallbackTemplate: 'https://line.me/ti/p/{value}',
+    // Universal link format with proper encoding for @ prefix IDs
+    webFallbackTemplate: 'https://line.me/R/ti/p/{value}',
     configKey: 'line_id',
     configLabel: 'LINE ID',
-    configHint: 'e.g. @iris_line',
+    configHint: 'e.g. %40iris_line (use %40 for @)',
     setupSteps: [
       'Find the Iris LINE ID or @ID',
-      'Enter it above (include @ if it is an @ID)',
-      'Tap to open the LINE chat',
+      'Enter it above (replace @ with %40 for proper URL encoding)',
+      'Tap to open the LINE profile and start a chat',
     ],
   ),
   ShortcutPlatform(
